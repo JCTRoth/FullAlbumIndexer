@@ -1,6 +1,6 @@
 #### This programs indexes full album music files and sets music tags for these files.
 #### You add the main path of your music folder and this programs iterates over all files.
-##### Example:
+##### Example single file:
 
 "/home/jonas/Musik/Album/ElectronicMusic/Gorillaz - Cracker Island (Full Album) 2023.opus"
 
