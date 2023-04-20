@@ -16,14 +16,37 @@ def set_music_information(album_obj: objects.AlbumObject):
     :param file_path:
     """
     if album_obj != None:
-        music_file = music_tag.load_file(album_obj.complete_file_path)
-        music_file["artist"] = album_obj.artist_name
-        music_file["year"] = album_obj.release_year
-        music_file["tracktitle"] = album_obj.title_name
-        music_file["album"] = album_obj.title_name
-        music_file["genre"] = album_obj.genre
-        music_file.save()
-        print("set_music_information save " + album_obj.complete_file_path)
+        try:
+            music_file = music_tag.load_file(album_obj.complete_file_path)
+            print("set_music_information save " + album_obj.complete_file_path)
+        except Exception as ex:
+            sys.stdout.write("ERROR: set_music_information load file " + album_obj.complete_file_path + str(ex))
+            print("         ")
+            return None
+
+        if album_obj.artist_name != "":
+            music_file["artist"] = album_obj.artist_name
+
+        if album_obj.release_year != 0:
+            music_file["year"] = album_obj.release_year
+
+        if music_file["tracktitle"] != "":
+            music_file["tracktitle"] = album_obj.title_name
+
+        if album_obj.title_name != "":
+            music_file["album"] = album_obj.title_name
+
+        if album_obj.genre != "":
+            music_file["genre"] = album_obj.genre
+
+        try:
+            music_file.save()
+            print("set_music_information save " + album_obj.complete_file_path)
+        except Exception as ex:
+            sys.stdout.write("ERROR: set_music_information save " + album_obj.complete_file_path + str(ex))
+            print("         ")
+            return None
+
     else:
         return None
 
@@ -70,15 +93,22 @@ def get_album_from_file_path(file_path: string) -> Optional[AlbumObject]:
         return None
 
     # Split into artist name and album/track title
-    seperator_index: int = file_path.rfind(seperator)
+    seperator_index: int = file_path.find(seperator)
     seperator_index_slash: int = file_path.rfind("/")
+
+    # Removes Trash like this S̲y̲s̲tem o̲f a D̲o̲wn
+    # In normal txt editor it looks like the ̲ would be under the latter's.
     artist_name: string = file_path[seperator_index_slash + 1:seperator_index - 1].strip()
-    album_object.artist_name = artist_name
+    album_object.artist_name = artist_name.replace("̲", "")
+
     print("artist_name " + str(artist_name))
 
     album_object.file_ending = get_file_ending(file_path)
 
-    title_name: string = file_path[seperator_index + 1:].strip()
+    title_name: string = file_path[seperator_index + 1:].strip().replace("̲", "")
+
+    title_name = title_name.replace("_", " ")
+
     # TODO ADD MORE CASES
     title_name = re.sub("\[?\(?Full Album\)?]?", "", title_name, flags=re.IGNORECASE)
     title_name.strip()
@@ -95,7 +125,7 @@ def get_album_from_file_path(file_path: string) -> Optional[AlbumObject]:
     year_pattern: string = "\[?\(?\d{4}\)?]?\-?"
     match_object = re.search(year_pattern, title_name)
     if match_object is not None:
-        album_object.release_year = re.search("\d{4}",match_object.group()).group()
+        album_object.release_year = re.search("\d{4}", match_object.group()).group()
         album_object.title_name = re.sub(year_pattern, "", title_name)
         print("release_year " + str(album_object.release_year))
     else:
@@ -113,8 +143,6 @@ def get_album_from_file_path(file_path: string) -> Optional[AlbumObject]:
                                     + album_object.title_name).strip() + album_object.file_ending
 
     # TODO Do more path cleaning
-    # Trash like this S̲y̲s̲tem o̲f a D̲o̲wn
-    # In normal txt editor it looks like the ̲ would be under the latter's.
     # Also remove trash like this:  🎸
 
     destination_path: string = str(path.parent.absolute()) + "/" + album_object.clean_file_name
