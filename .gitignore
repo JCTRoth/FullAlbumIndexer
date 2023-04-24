@@ -132,6 +132,6 @@ dmypy.json
 .idea
 
 # Archives
-.zip
-.rar
-.7z
+*.zip
+*.rar
+*.7z
