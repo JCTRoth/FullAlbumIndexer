@@ -3,7 +3,7 @@ from logic import list_files, get_album_from_file_path, set_music_information
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    file_list = list_files('/home/jonas/Musik/A13/Music/Album')
+    file_list = list_files('/home/jonas/Musik/A13/Music/Album/Test')
     for i in file_list:
         print(i)
         album_data: objects.AlbumObject = get_album_from_file_path(i)

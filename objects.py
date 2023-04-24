@@ -9,7 +9,7 @@ class AlbumObject:
         self._artist_name = ""
         self._title_name = ""
         self._file_ending = ""
-        self._release_year = 0
+        self._release_year = ""
         self._genre = ""
 
         # self._complete_file_path: string
