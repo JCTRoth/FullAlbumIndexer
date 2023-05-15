@@ -1,4 +1,12 @@
-import string
+class WebPag:
+    def __init__(self):
+        self.api_search_request = ""
+        self.html_content = ""
+        self.html_url = ""
+        self.extracted_playlist_node = ""
+        self.extracted_wiki_node = ""
+        self.extracted_playlist_text = ""
+        self.extracted_wiki_text = ""
 
 
 class AlbumObject:

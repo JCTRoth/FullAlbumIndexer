@@ -1,4 +1,5 @@
 import os
+import shutil
 import string
 import sys
 from pathlib import Path
@@ -76,15 +77,18 @@ def get_album_from_file_path(file_path: string) -> Optional[AlbumObject]:
     """
     album_object = objects.AlbumObject()
 
+    album_object.complete_file_path = file_path
+
+    album_object.file_name = os.path.basename(file_path)
+    album_object.file_ending = album_object.file_name.endswith(file_path)
+
     # Clean file path from masking
     # Removes Trash like this S̲y̲s̲tem o̲f a D̲o̲wn
     # In normal txt editor it looks like the ̲ would be under the latter's.
-    file_path.replace("̤", "")
-    file_path.replace("̲", "")
-
-    album_object.complete_file_path = file_path
-    album_object.file_name = os.path.basename(file_path)
-    album_object.file_ending = album_object.file_name.endswith(file_path)
+    file_path = file_path.replace("̤", "")
+    file_path = file_path.replace("̲", "")
+    file_path = file_path.replace("_", "")
+    file_path = file_path.replace("∙", "")
 
     # used in clean path for rename
     clean_file_separator = "-"
@@ -109,8 +113,7 @@ def get_album_from_file_path(file_path: string) -> Optional[AlbumObject]:
     # Title ---------
     title_name = title_name.replace("  ", " ")
     title_name = title_name.replace("  ", " ")
-    title_name = title_name.replace("_", " ")
-    title_name = title_name.replace("̲", "")
+
 
     title_name = re.sub("\[?\(?Full Album\)?]?", "", title_name, flags=re.IGNORECASE)
     title_name = re.sub("\[?\(?complete album\)?]?", "", title_name, flags=re.IGNORECASE)
@@ -170,11 +173,12 @@ def get_album_from_file_path(file_path: string) -> Optional[AlbumObject]:
     # Rename file using clean file name
     try:
         if album_object.complete_file_path != destination_path:
+            print("album_object.complete_file_path, destination_path " + album_object.complete_file_path + " !!! " +destination_path)
             os.rename(album_object.complete_file_path, destination_path)
             print("Renamed file:" + album_object.complete_file_path + " -> " + destination_path)
             album_object.complete_file_path = destination_path
     except Exception as ex:
-        sys.stdout.write("ERROR: Rename file failed exception: " + str(ex))
+        print("ERROR: Rename file failed exception: " + str(ex))
         print("         ")
         return None
 
