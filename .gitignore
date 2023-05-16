@@ -135,3 +135,6 @@ dmypy.json
 *.zip
 *.rar
 *.7z
+
+# Test Folder
+test_folder/

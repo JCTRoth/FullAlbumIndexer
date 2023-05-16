@@ -28,6 +28,7 @@ def set_music_information(album_obj: objects.AlbumObject):
             music_file["artist"] = album_obj.artist_name
 
         if album_obj.release_year != "":
+            album_obj.release_year = re.sub(r"[^a-zA-Z0-9 ]", "", album_obj.release_year)
             music_file["year"] = int(album_obj.release_year)
 
         if music_file["tracktitle"] != "":
@@ -82,6 +83,8 @@ def get_album_from_file_path(file_path: string) -> Optional[AlbumObject]:
     album_object.file_name = os.path.basename(file_path)
     album_object.file_ending = album_object.file_name.endswith(file_path)
 
+    folder_path: Path = Path(file_path).parent.absolute()
+
     # Clean file path from masking
     # Removes Trash like this S̲y̲s̲tem o̲f a D̲o̲wn
     # In normal txt editor it looks like the ̲ would be under the latter's.
@@ -113,7 +116,6 @@ def get_album_from_file_path(file_path: string) -> Optional[AlbumObject]:
     # Title ---------
     title_name = title_name.replace("  ", " ")
     title_name = title_name.replace("  ", " ")
-
 
     title_name = re.sub("\[?\(?Full Album\)?]?", "", title_name, flags=re.IGNORECASE)
     title_name = re.sub("\[?\(?complete album\)?]?", "", title_name, flags=re.IGNORECASE)
@@ -159,8 +161,7 @@ def get_album_from_file_path(file_path: string) -> Optional[AlbumObject]:
 
     # Genre ---------
     # Get genre from folder that the album contains
-    path: Path = Path(file_path)
-    album_object.genre = path.parent.absolute().name
+    album_object.genre = folder_path.name
     print("genre " + album_object.genre)
 
     # Create clean file name
@@ -168,15 +169,18 @@ def get_album_from_file_path(file_path: string) -> Optional[AlbumObject]:
     album_object.clean_file_name = (artist_name + " " + clean_file_separator + " "
                                     + album_object.title_name).strip() + album_object.file_ending
 
-    destination_path: string = str(path.parent.absolute()) + "/" + album_object.clean_file_name
+    destination_path: string = str(folder_path.absolute()) + "/" + album_object.clean_file_name
 
     # Rename file using clean file name
     try:
         if album_object.complete_file_path != destination_path:
-            print("album_object.complete_file_path, destination_path " + album_object.complete_file_path + " !!! " +destination_path)
-            os.rename(album_object.complete_file_path, destination_path)
+            os.rename(album_object.complete_file_path,destination_path)
             print("Renamed file:" + album_object.complete_file_path + " -> " + destination_path)
             album_object.complete_file_path = destination_path
+    except FileNotFoundError as ex:
+        print("ERROR: Rename file failed exception: " + str(ex))
+    except FileExistsError as ex:
+        print("ERROR: Rename file failed exception: " + str(ex))
     except Exception as ex:
         print("ERROR: Rename file failed exception: " + str(ex))
         print("         ")
