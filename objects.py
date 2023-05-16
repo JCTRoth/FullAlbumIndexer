@@ -26,7 +26,7 @@ class AlbumObject:
         # self._artist_name: string
         # self._title_name: string
         # self._file_ending: string
-        # self._release_year: int
+        # self._release_year: string
 
     @property
     def file_name(self):

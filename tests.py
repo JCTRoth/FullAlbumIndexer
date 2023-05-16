@@ -8,7 +8,10 @@ from pathlib import Path
 # TODO Add Unit Tests
 
 def create_test_files(folder_path: Path):
-    create_empty_file("Test - Normal Path 2023.opus", folder_path)
+    create_empty_file("Test - Normal Path 2023.opus", folder_path)  # Album Name: Normal Path - Album Date: 2023
+    create_empty_file("T.e.s.t - N.o.r.m.a.l P.a.t.h 2.0.2.3.opus", folder_path)  #TODO Album Name: Normal Path - Album Date: 2023
+    create_empty_file("Test - 1999 2023.opus", folder_path) #TODO Album Name: 1999 - Album Date: 2023
+    create_empty_file("Test - 1999-2016 2023.opus", folder_path) #TODO Album Name: 1999-2016 - Album Date: 2023
     create_empty_file("R̲o̲b̲b̲i̲e̲ W̲i̲l̲l̲i̲a̲m̲s̲ - L̲i̲f̲e̲ T̲h̲r̲u̲ A̲ L̲e̲n̲s̲.opus", folder_path)
     create_empty_file("Th̲e Cur̲e̲ – Thre̲e̲ Imagi̲n̲ary B̲oys.opus", folder_path)
     create_empty_file("B̤ṳf̤f̤a̤l̤o̤ ̤V̤o̤l̤c̤a̤n̤i̤c̤ ̤- R̤o̤c̤k̤ 1973.opus", folder_path)

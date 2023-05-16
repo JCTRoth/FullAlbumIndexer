@@ -14,7 +14,6 @@ def set_music_information(album_obj: objects.AlbumObject):
     """
     Set information from album object in the music file and saves this to disk.
     :param album_obj:
-    :param file_path:
     """
     if album_obj != None:
         try:

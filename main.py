@@ -1,6 +1,5 @@
 import os
 import string
-import time
 from pathlib import Path
 
 import objects
@@ -32,17 +31,11 @@ if __name__ == '__main__':
     run(testFolderPath)
     tests.delete_all_files_in_folder(testFolderPath)
 
+    # Run on real music folder
     # run('/home/jonas/Musik/A13/Music/Album/Test')
 
+# TODO RETURN LIST OF MUSIC FILES WITH NOT CORRECT FORMATION
 
+# TODO ADD MODE FOR SINGLE TRACKS
 
-
-
-
-
-
-#TODO RETURN LIST OF MUSIC FILES WITH NOT CORRECT FORMATION
-
-#TODO ADD MODE FOR SINGLE TRACKS
-
-#TODO ADD MODE FOR ALBUMS WITH SEPARATED FILES IN ONE FOLDER
+# TODO ADD MODE FOR ALBUMS WITH SEPARATED FILES IN ONE FOLDER
