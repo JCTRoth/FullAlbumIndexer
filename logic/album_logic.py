@@ -130,10 +130,12 @@ def get_album_from_file_path(file_path: string) -> Optional[AlbumObject]:
     # [2001]
     # (2001)
     # (2001-2011)
-    year_pattern: string = "\[?\(?\d{4}\)?]?\-?"
+    year_pattern: string = r"(?:\[|\()?\d{4}(?:\]|\))?"  # Non-capturing groups for brackets/parentheses
     album_date_string: string = re.findall(year_pattern, title_name)
     if album_date_string:
-        album_object.release_year = album_date_string[0][:4]  # 2002- to 2002
+        # Extract just the 4 digits from the match
+        year = re.search(r"\d{4}", album_date_string[0]).group()
+        album_object.release_year = year
         if len(album_date_string) > 1:  # Match 2001-2002
             album_object.title_name = title_name
             # TODO Should be there some changes to the year in the file name?

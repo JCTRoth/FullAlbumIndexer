@@ -168,6 +168,10 @@ class TestAlbumIndexer(unittest.TestCase):
             {
                 "filename": "Artist - Album (High Quality).opus",
                 "expected_title": "Album"
+            },
+                        {
+                "filename": "Artist - Album.mp3",
+                "expected_title": "Album"
             }
         ]
 
