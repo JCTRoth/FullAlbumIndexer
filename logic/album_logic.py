@@ -6,8 +6,8 @@ from pathlib import Path
 from typing import List, Optional
 import re
 import music_tag
-import objects
-from objects import AlbumObject
+from logic import objects
+from logic.objects import AlbumObject
 
 
 def set_music_information(album_obj: objects.AlbumObject):
@@ -57,7 +57,7 @@ def list_files(folder_path):
     :param folder_path:
     :return: List[string]
     """
-    file_list: List[string] = []
+    file_list = []
 
     for current_dir, subdirs, files in os.walk(folder_path):
         for filename in files:
