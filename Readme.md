@@ -30,11 +30,15 @@ This information is than saved to the file as music information.
 
 
 Also the program cleans up file names, example:
+
 R̲o̲b̲b̲i̲e̲ William̲s̲ - L-i-f-e̲ T̲h̲r̲u̲ A̲ L̲e̲n̲s̲
 will result in 
 Robbie Williams - Life Thru A Lens
 
+
 B̤ṳf̤f̤a̤l̤o̤ ̤V̤o̤l̤c̤a̤n̤i̤c̤ ̤- R̤o̤c̤k̤ 1973.opus
 in
+
 Buffalo Valcanic - Rock
+
 the 1973 is removed from the title and added to the meta informtion.
