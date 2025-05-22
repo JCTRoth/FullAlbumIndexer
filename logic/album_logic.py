@@ -8,6 +8,7 @@ import re
 import music_tag
 from logic import objects
 from logic.objects import AlbumObject
+from logic.char_replacer_helper import TextCleaner
 
 
 def set_music_information(album_obj: objects.AlbumObject):
@@ -84,13 +85,8 @@ def get_album_from_file_path(file_path: string) -> Optional[AlbumObject]:
 
     folder_path: Path = Path(file_path).parent.absolute()
 
-    # Clean file path from masking
-    # Removes Trash like this S̲y̲s̲tem o̲f a D̲o̲wn
-    # In normal txt editor it looks like the ̲ would be under the latter's.
-    file_path = file_path.replace("̤", "")
-    file_path = file_path.replace("̲", "")
-    file_path = file_path.replace("_", "")
-    file_path = file_path.replace("∙", "")
+    # Clean file path from special characters
+    file_path = TextCleaner.clean_special_characters(file_path)
 
     # used in clean path for rename
     clean_file_separator = "-"
@@ -105,6 +101,7 @@ def get_album_from_file_path(file_path: string) -> Optional[AlbumObject]:
 
     # Artist_name ---------
     artist_name: string = file_path[seperator_index_slash + 1:seperator_index - 1].strip()
+    artist_name = TextCleaner.clean_special_characters(artist_name)
     album_object.artist_name = artist_name
     print("artist_name " + str(artist_name))
 

@@ -90,7 +90,7 @@ class TestAlbumIndexer(unittest.TestCase):
             {
                 "filename": "B̤ṳf̤f̤a̤l̤o̤ ̤V̤o̤l̤c̤a̤n̤i̤c̤ ̤- R̤o̤c̤k̤ 1973.opus",
                 "expected": {
-                    "artist": "Bṳffalo Volcanic",
+                    "artist": "Buffalo Volcanic",
                     "title": "Rock",
                     "year": "1973"
                 }
