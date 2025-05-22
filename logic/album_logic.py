@@ -119,7 +119,7 @@ def get_album_from_file_path(file_path: string) -> Optional[AlbumObject]:
     title_name = re.sub("\[?\(?Full Album\)?]?", "", title_name, flags=re.IGNORECASE)
     title_name = re.sub("\[?\(?complete album\)?]?", "", title_name, flags=re.IGNORECASE)
     title_name = re.sub("\[?\(?High Quality\)?]?", "", title_name, flags=re.IGNORECASE)
-    title_name = re.sub("(\[?\(?HQ\s?\)?]?)\s", "", title_name, flags=re.IGNORECASE)
+    title_name = re.sub("(\[?\(?HQ\s?\)?]?)", "", title_name, flags=re.IGNORECASE)
 
     title_name.strip()
 
