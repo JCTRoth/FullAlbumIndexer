@@ -212,6 +212,6 @@ def get_separator_from_filepath(file_path: string) -> string:
     elif "—" in file_path:
         separator = "—"
     else:
-        print("WARN: No seperator in file path! " + file_path)
+        print("WARN: No seperator in album file path! " + file_path)
         return None
     return separator

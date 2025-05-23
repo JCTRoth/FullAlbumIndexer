@@ -6,7 +6,7 @@ import shutil
 from pathlib import Path
 from unittest.mock import patch, MagicMock
 
-from logic.main import run
+from main import run
 from logic.album_logic import get_album_from_file_path, set_music_information
 from logic.objects import AlbumObject
 
