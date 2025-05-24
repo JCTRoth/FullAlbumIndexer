@@ -64,24 +64,24 @@ The program can be run using the following commands:
 ### Basic Usage
 Process a single folder:
 ```bash
-python3 logic/main.py /path/to/music/folder
+python3 main.py /path/to/music/folder
 ```
 
 ### Advanced Options
 
 Process recursively with verbose output:
 ```bash
-python3 logic/main.py -rv /path/to/music/folder
+python3 main.py -rv /path/to/music/folder
 ```
 
 Preview changes without modifying files (dry-run):
 ```bash
-python3 logic/main.py --dry-run /path/to/music/folder
+python3 main.py --dry-run /path/to/music/folder
 ```
 
 Full example with all options:
 ```bash
-python3 logic/main.py -rv --dry-run /path/to/music/folder
+python3 main.py -rv --dry-run /path/to/music/folder
 ```
 
 ### Command Line Options
@@ -94,4 +94,5 @@ python3 logic/main.py -rv --dry-run /path/to/music/folder
 
 ![](.readme/2025-05-22_21-37.png "Example Media Info opus file.")
 
-![](.readme/17_04_2023_-_01_12_05.png "Example Media Info opus file.")
+
+![](.readme/photo_2025-05-24_21-09-43.jpg)

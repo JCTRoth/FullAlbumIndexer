@@ -14,31 +14,44 @@ from logic.char_replacer_helper import TextCleaner
 def set_music_information(album_obj: objects.AlbumObject):
     """
     Set information from album object in the music file and saves this to disk.
-    :param album_obj:
+    :param album_obj: AlbumObject containing the metadata to set
     """
-    if album_obj != None:
-        try:
-            music_file = music_tag.load_file(album_obj.complete_file_path)
-        except Exception as ex:
-            sys.stdout.write("ERROR: set_music_information load file " + album_obj.complete_file_path + str(ex))
-            print("         ")
-            return None
+    if album_obj is None:
+        print("ERROR: Album object is None")
+        return None
 
-        if album_obj.artist_name != "":
-            music_file["artist"] = album_obj.artist_name
+    try:
+        music_file = music_tag.load_file(album_obj.complete_file_path)
+    except Exception as ex:
+        sys.stdout.write("ERROR: set_music_information load file " + album_obj.complete_file_path + str(ex))
+        print("         ")
+        return None
 
-        if album_obj.release_year != "":
-            album_obj.release_year = re.sub(r"[^a-zA-Z0-9 ]", "", album_obj.release_year)
-            music_file["year"] = int(album_obj.release_year)
+    try:
+        # Artist
+        if album_obj.artist_name is not None and album_obj.artist_name.strip() != "":
+            music_file["artist"] = album_obj.artist_name.strip()
 
-        if music_file["tracktitle"] != "":
-            music_file["tracktitle"] = album_obj.title_name
+        # Year
+        if album_obj.release_year is not None and album_obj.release_year.strip() != "":
+            try:
+                clean_year = re.sub(r"[^0-9]", "", album_obj.release_year)
+                if clean_year.isdigit():
+                    music_file["year"] = int(clean_year)
+            except (ValueError, TypeError) as ex:
+                print(f"WARNING: Invalid year format: {album_obj.release_year}")
 
-        if album_obj.title_name != "":
-            music_file["album"] = album_obj.title_name
+        # Track title - only set if the field exists and we have a value
+        if "tracktitle" in music_file and album_obj.title_name is not None and album_obj.title_name.strip() != "":
+            music_file["tracktitle"] = album_obj.title_name.strip()
 
-        if album_obj.genre != "":
-            music_file["genre"] = album_obj.genre
+        # Album title
+        if album_obj.title_name is not None and album_obj.title_name.strip() != "":
+            music_file["album"] = album_obj.title_name.strip()
+
+        # Genre
+        if album_obj.genre is not None and album_obj.genre.strip() != "":
+            music_file["genre"] = album_obj.genre.strip()
 
         try:
             music_file.save()
@@ -48,8 +61,11 @@ def set_music_information(album_obj: objects.AlbumObject):
             print("         ")
             return None
 
-    else:
+    except Exception as ex:
+        print(f"ERROR: Failed to set metadata: {str(ex)}")
         return None
+
+    return True
 
 
 def list_files(folder_path):
