@@ -2,6 +2,7 @@
 
 import argparse
 import sys
+import os
 from dataclasses import dataclass
 from logic.album_logic import list_files, get_album_from_file_path, set_music_information
 
@@ -28,34 +29,35 @@ class ProcessingSummary:
 
 def run(folder_path: str, recursive: bool = False, dry_run: bool = False, verbose: bool = False) -> None:
     """
-    Main function to process music files in a folder.
+    Process music files in the specified folder.
     
     Args:
-        folder_path (str): Path to the folder containing music files
-        recursive (bool): Whether to process subfolders recursively
-        dry_run (bool): If True, show what would be done without making changes
-        verbose (bool): If True, show detailed processing information
+        folder_path: Path to the folder containing music files
+        recursive: Whether to process subfolders
+        dry_run: If True, only show what would be done without making changes
+        verbose: If True, show detailed processing information
     """
-    if verbose:
-        print(f"Processing folder: {folder_path}")
-        if dry_run:
-            print("Dry run mode - no changes will be made")
-        if recursive:
-            print("Processing recursively")
-
-    # Initialize summary tracking
     summary = ProcessingSummary()
-
-    # Get list of files to process
-    files = list_files(folder_path)
-    summary.total_files = len(files)
     
-    if verbose:
-        print(f"Found {len(files)} files to process")
+    # Get list of files to process
+    try:
+        files = list_files(folder_path) if recursive else [
+            os.path.join(folder_path, f) for f in os.listdir(folder_path)
+            if os.path.isfile(os.path.join(folder_path, f))
+        ]
+        summary.total_files = len(files)
+        if verbose:
+            print(f"\nFound {len(files)} files to process in {folder_path}")
+            if recursive:
+                print("Processing recursively through subfolders")
+    except Exception as e:
+        print(f"ERROR: Failed to list files in {folder_path}: {str(e)}")
+        return
 
     for file_path in files:
         if verbose:
-            print(f"\nProcessing file: {file_path}")
+            print(f"\n{'='*50}")
+            print(f"Processing file: {file_path}")
 
         try:
             # Get album information from file name
@@ -63,7 +65,11 @@ def run(folder_path: str, recursive: bool = False, dry_run: bool = False, verbos
             
             if album_obj is None:
                 if verbose:
-                    print(f"Skipping {file_path} - could not parse file name")
+                    print(f"SKIP: Could not parse file name. Possible issues:")
+                    print(f"  - No valid separator found (-, –, or —)")
+                    print(f"  - File name does not match expected format: Artist - Title")
+                    print(f"  - Special characters could not be processed")
+                    print(f"Original file: {os.path.basename(file_path)}")
                 summary.skipped_files += 1
                 continue
 
@@ -79,17 +85,32 @@ def run(folder_path: str, recursive: bool = False, dry_run: bool = False, verbos
                 # Set music information in the file
                 result = set_music_information(album_obj)
                 if result is None:
+                    if verbose:
+                        print(f"ERROR: Failed to set metadata for {file_path}")
+                        print("  - Check if file is write-protected")
+                        print("  - Verify file is a valid audio format")
+                        print("  - Ensure sufficient disk space")
                     summary.error_files += 1
                 else:
+                    if verbose:
+                        print(f"SUCCESS: Updated metadata and renamed file")
+                        print(f"  From: {os.path.basename(file_path)}")
+                        print(f"  To: {album_obj.clean_file_name}")
                     summary.processed_files += 1
 
         except Exception as e:
             if verbose:
-                print(f"Error processing {file_path}: {str(e)}")
+                print(f"ERROR: Unexpected error processing {file_path}")
+                print(f"  Error type: {type(e).__name__}")
+                print(f"  Error message: {str(e)}")
+                print("  Stack trace:")
+                import traceback
+                print('    ' + '\n    '.join(traceback.format_exc().split('\n')))
             summary.error_files += 1
 
     if verbose:
-        print("\nProcessing complete")
+        print(f"\n{'='*50}")
+        print("Processing complete")
     
     # Display the summary
     summary.display()
